@@ -25,6 +25,7 @@ Hardware-ul comunică prin protocol **CAN** și transmite datele către server p
 - **Python** (Flask, SQLAlchemy, Werkzeug security)  
 - **SQLite** – bază de date lightweight  
 - **Frontend** – HTML, CSS, JavaScript, Chart.js, Jinja2  
+<img width="1154" height="826" alt="zzzzzz" src="https://github.com/user-attachments/assets/4f5b0c23-0dbb-4884-a325-fd758d3e3ce3" />
 
 ### Hardware
 - **ESP32** – microcontroller cu Wi-Fi + Bluetooth  
@@ -32,6 +33,7 @@ Hardware-ul comunică prin protocol **CAN** și transmite datele către server p
 - **Regulator TR10S3V3** – conversie 12V → 3.3V  
 - **Diodă NUP2105L** – protecție supratensiune  
 - **Arduino IDE** – dezvoltare și programare  
+<img width="1493" height="863" alt="schemass" src="https://github.com/user-attachments/assets/cb4de4c7-f85e-4077-b05a-f0a27e308bd1" />
 
 ## ⚙️ Funcționalități
 - Creare cont utilizator și autentificare securizată  
