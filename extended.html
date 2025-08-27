@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Extended OBD2 Data</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
+        }
+        h2 {
+            color: #343a40;
+        }
+        a {
+            margin-right: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        th {
+            background-color: #e9ecef;
+        }
+    </style>
+    <script>
+        function loadData() {
+            fetch('/extended/data')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById("obd-data");
+                    tbody.innerHTML = "";
+                    data.forEach(row => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${row[0] || 'N/A'}</td>
+                            <td>${row[1] || 'N/A'}</td>
+                            <td>${row[2] || 'N/A'}</td>
+                            <td>${row[3]?.toFixed(2) || 'N/A'}</td>
+                            <td>${row[4] || 'N/A'}</td>
+                            <td>${row[5] || 'N/A'}</td>
+                            <td>${row[6]?.toFixed(2) || 'N/A'}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+        }
+
+        setInterval(loadData, 1000);
+        window.onload = loadData;
+    </script>
+</head>
+<body>
+    <h2>Extended OBD2 Data</h2>
+    <a href="/dashboard">Back to Dashboard</a>
+    <a href="/logout">Logout</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>RPM</th>
+                <th>Speed (km/h)</th>
+                <th>Torque (Nm)</th>
+                <th>Coolant Temp (C)</th>
+                <th>Intake Pressure (kPa)</th>
+                <th>Battery Voltage (V)</th>
+            </tr>
+        </thead>
+        <tbody id="obd-data"></tbody>
+    </table>
+</body>
+</html>

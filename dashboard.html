@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f4;
+            padding: 30px;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .buttons a {
+            margin-right: 15px;
+            text-decoration: none;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+        }
+        .buttons a:hover {
+            background-color: #0056b3;
+        }
+        canvas {
+            margin-top: 30px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Hello, {{ username }}</h2>
+
+    <div class="buttons">
+        <a href="/extended">View Extended Data</a>
+        <a href="/check">Does your car run OK?</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <canvas id="dynoChart" width="900" height="450"></canvas>
+
+    <script>
+        const ctx = document.getElementById('dynoChart').getContext('2d');
+
+        const dynoChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'Torque (Nm)',
+                        data: [],
+                        borderColor: 'green',
+                        backgroundColor: 'green',
+                        yAxisID: 'y',
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: 'Power (kW)',
+                        data: [],
+                        borderColor: 'red',
+                        backgroundColor: 'red',
+                        yAxisID: 'y1',
+                        tension: 0.4,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                animation: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: 'Engine Speed (RPM)'
+                        },
+                        min: 0,
+                        max: 9000
+                    },
+                    y: {
+                        type: 'linear',
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Torque (Nm)'
+                        },
+                        min: 0,
+                        max: 700
+                    },
+                    y1: {
+                        type: 'linear',
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Power (kW)'
+                        },
+                        min: 0,
+                        max: 700,
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        let torqueData = [];
+        let powerData = [];
+
+        function updateChart() {
+            fetch('/extended/data')
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(row => {
+                        const rpm = row[1];
+                        const torque = row[3];
+                        if (rpm && torque) {
+                            const powerKw = ((rpm * torque) / 7127);
+                            torqueData.push({ x: rpm, y: torque });
+                            powerData.push({ x: rpm, y: powerKw });
+                        }
+                    });
+
+                    dynoChart.data.datasets[0].data = torqueData;
+                    dynoChart.data.datasets[1].data = powerData;
+                    dynoChart.update();
+                });
+        }
+
+        setInterval(updateChart, 1000);
+        window.onload = () => {
+            torqueData = [];
+            powerData = [];
+            updateChart();
+        };
+    </script>
+</body>
+</html>

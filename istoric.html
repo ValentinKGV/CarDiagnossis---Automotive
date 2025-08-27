@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Istoric OBD2</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            padding: 30px;
+        }
+        h2 {
+            color: #343a40;
+        }
+        a {
+            margin-right: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        th {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <h2>Date Salvate - Istoric</h2>
+    <a href="/dashboard">Back to Dashboard</a>
+    <a href="/logout">Logout</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>RPM</th>
+                <th>Speed (km/h)</th>
+                <th>Torque (Nm)</th>
+                <th>Coolant Temp (C)</th>
+                <th>Intake Pressure (kPa)</th>
+                <th>Battery Voltage (V)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ "%.2f"|format(row[4]) if row[4] is not none else "N/A" }}</td>
+                    <td>{{ row[5] }}</td>
+                    <td>{{ row[6] }}</td>
+                    <td>{{ "%.2f"|format(row[7]) if row[7] is not none else "N/A" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
